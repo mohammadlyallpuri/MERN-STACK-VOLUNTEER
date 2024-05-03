@@ -1,20 +1,38 @@
-import React, { useState } from 'react'; // Import useState from React
+import React, { useState } from 'react';
+import axios from "axios";
 
 const Donate = () => {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
-  const[disableBtn,setDisableBtn]=useState("")
+  const [disableBtn, setDisableBtn] = useState(false); // Initialize with false
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevents the default form submission behavior
-    // Here you can add the logic to handle the donation submission
+  const handleCheckout = async (e) => {
+    e.preventDefault();
+    try {
+      setDisableBtn(true);
+      await axios.post(
+        "http://localhost:4000/api/v1/checkout",
+        { name, amount, email, message },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" }
+        }
+      ).then(res => {
+        console.log(res.data);
+        window.location.href=res.data.result.url;
+
+      });
+    } catch (error) {
+      setDisableBtn(false);
+      console.error(error);
+    }
   };
 
   return (
     <section className='donate'>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleCheckout}>
         <div>
           <img src="/logo.png" alt="logo" />
         </div>

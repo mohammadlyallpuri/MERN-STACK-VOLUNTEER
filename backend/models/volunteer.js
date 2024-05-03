@@ -14,4 +14,4 @@ const volunteerScheam= new mongoose.Schema({
     paymentStatus:String,
 })
 
-export const volunteer= mongoose.model("volunteer",volunteerScheam)
+export const Volunteer= mongoose.model("volunteer",volunteerScheam)

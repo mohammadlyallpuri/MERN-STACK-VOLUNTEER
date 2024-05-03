@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -7,6 +9,22 @@ const Contact = () => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
+    axios.post("http://localhost:4000/api/v1/message/send",
+      { name, phone, message },
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" }
+      })
+      .then((res) => {
+        setName("");
+        setPhone("");
+        setMessage("");
+        toast.success(res.data.message);
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error(error.response.data.message);
+      });
   };
 
   return (
